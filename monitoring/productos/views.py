@@ -4,13 +4,14 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.urls import reverse
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 import json
-
+@csrf_exempt
 def ProductoList(request):
     queryset = Producto.objects.all()
     context = list(queryset.values('id', 'name', 'unidades', 'price', 'category', 'image'))
     return JsonResponse(context, safe=False)
-
+@csrf_exempt
 def ProductoCreate(request):
     if request.method == 'POST':
         data = request.body.decode('utf-8')
@@ -24,7 +25,7 @@ def ProductoCreate(request):
         producto.save()
         return HttpResponse("successfully created producto")
     
-
+@csrf_exempt
 def ProductoUpdate(request):
     if request.method == 'POST':
         data = request.body.decode('utf-8')
@@ -37,7 +38,7 @@ def ProductoUpdate(request):
         producto.unidades = data_json["unidades"]
         producto.save()
         return HttpResponse("successfully updated producto")
-    
+@csrf_exempt 
 def ProductoDelete(request):
     if request.method == 'POST':
         data = request.body.decode('utf-8')
